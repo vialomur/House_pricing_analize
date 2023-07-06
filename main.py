@@ -56,12 +56,11 @@ ax1 = plt.subplot2grid((1, 1), (0, 0))
 
 HPI_data = pd.read_pickle("data_frame.pickle")
 
-TX1year = HPI_data["TX SA Value"].resample("A")
-print(TX1year)
-HPI_data["TX SA Value"].plot(ax=ax1)
-TX1year.plot(ax=ax1)
+HPI_data["TX1yr"] = HPI_data["TX SA Value"].resample("A").mean().reindex(HPI_data.index)
+HPI_data.dropna(inplace=True)
 
-plt.legend().remove()
+print(HPI_data[["TX1yr", "TX SA Value"]])
+HPI_data[["TX1yr", "TX SA Value"]].plot(ax=ax1)
+
+plt.legend(loc=4)
 plt.show()
-
-# print(Values)
