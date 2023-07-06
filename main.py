@@ -52,15 +52,14 @@ def HPI_Benchmark():
 # get_states_data()
 
 fig = plt.figure()
-ax1 = plt.subplot2grid((1, 1), (0, 0))
-
+ax1 = plt.subplot2grid((2, 1), (0, 0))
+ax2 = plt.subplot2grid((2, 1), (1, 0),sharex = ax1)
 HPI_data = pd.read_pickle("data_frame.pickle")
 
-HPI_data["TX1yr"] = HPI_data["TX SA Value"].resample("A").mean().reindex(HPI_data.index)
-#HPI_data.dropna(inplace=True)
-HPI_data.fillna(method="bfill", inplace=True)
-print(HPI_data[["TX1yr", "TX SA Value"]])
-HPI_data[["TX1yr", "TX SA Value"]].plot(ax=ax1)
+HPI_data["TX12MA"] = HPI_data["TX SA Value"].rolling(12).mean()
+HPI_data["TX12STD"] = HPI_data["TX SA Value"].rolling(12).std()
 
+HPI_data[["TX12MA", "TX SA Value"]].plot(ax=ax1)
+HPI_data["TX12STD"].plot(ax=ax2)
 plt.legend(loc=4)
 plt.show()
